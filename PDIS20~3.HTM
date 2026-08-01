@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit GIV® · Recursos gratuitos · PDIS 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A2342;--navy2:#0D2D56;
+  --gold:#C9A84C;--gold2:#E8C96A;
+  --emerald:#1A6B45;--emerald2:#1F824F;
+  --white:#fff;--light:#F8FAFC;
+  --dgray:#334155;--lgray:#CBD5E1;--muted:#64748B;
+  --coral:#C0392B;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--light);color:var(--dgray)}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,35,66,.97);backdrop-filter:blur(12px);
+  padding:14px 5%;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(201,168,76,.2);
+}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-logo{
+  width:38px;height:38px;background:var(--gold);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:16px;color:var(--navy);
+}
+.nav-name{font-size:15px;font-weight:700;color:#fff}
+.nav-sub{font-size:11px;color:var(--lgray)}
+.nav-cta{
+  background:var(--gold);color:var(--navy);border:none;
+  padding:9px 22px;border-radius:20px;font-size:14px;font-weight:700;
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:transform .15s;
+}
+.nav-cta:hover{transform:scale(1.05)}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(135deg, var(--navy) 0%, #0D3060 60%, #0A4530 100%);
+  padding:80px 5% 90px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'GIV';position:absolute;right:-40px;top:-40px;
+  font-size:280px;font-weight:900;color:rgba(255,255,255,.03);
+  line-height:1;pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold);font-size:12px;font-weight:700;letter-spacing:2px;
+  padding:6px 18px;border-radius:20px;margin-bottom:24px;
+}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%}
+.hero h1{
+  font-size:clamp(32px,6vw,62px);font-weight:900;line-height:1.1;
+  color:#fff;margin-bottom:16px;max-width:760px;
+}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{
+  font-size:clamp(16px,2.5vw,20px);color:rgba(255,255,255,.75);
+  line-height:1.6;max-width:620px;margin-bottom:36px;
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:52px}
+.btn-hero-primary{
+  background:var(--gold);color:var(--navy);border:none;
+  padding:16px 40px;border-radius:30px;font-size:17px;font-weight:800;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-hero-primary:hover{transform:scale(1.04);box-shadow:0 10px 36px rgba(201,168,76,.4)}
+.btn-hero-secondary{
+  background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);
+  padding:15px 34px;border-radius:30px;font-size:16px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:background .15s;
+}
+.btn-hero-secondary:hover{background:rgba(255,255,255,.18)}
+
+/* Hero stats */
+.hero-stats{
+  display:flex;gap:0;border-top:1px solid rgba(255,255,255,.1);
+  padding-top:32px;flex-wrap:wrap;
+}
+.h-stat{
+  padding:0 32px 0 0;margin-right:32px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.h-stat:last-child{border-right:none}
+.h-stat-num{font-size:32px;font-weight:900;color:var(--gold)}
+.h-stat-lbl{font-size:13px;color:rgba(255,255,255,.6)}
+
+/* ── SECTION COMMON ── */
+section{padding:72px 5%}
+.section-label{
+  font-size:12px;letter-spacing:3px;font-weight:700;color:var(--gold);
+  text-transform:uppercase;margin-bottom:10px;
+}
+.section-title{font-size:clamp(24px,4vw,38px);font-weight:800;color:var(--navy);margin-bottom:12px}
+.section-sub{font-size:17px;color:var(--muted);line-height:1.6;max-width:580px;margin-bottom:44px}
+
+/* ── RESOURCES GRID ── */
+#recursos{background:#fff}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+
+.res-card{
+  border-radius:16px;padding:28px;position:relative;overflow:hidden;
+  border:1px solid #E2E8F0;transition:transform .2s,box-shadow .2s;
+  background:#fff;display:flex;flex-direction:column;
+}
+.res-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,.1)}
+
+.res-card .res-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;
+  padding:4px 12px;border-radius:20px;margin-bottom:16px;
+}
+.tag-live{background:#FEF3C7;color:#92400E}
+.tag-pdf{background:#EFF6FF;color:#1D4ED8}
+.tag-tool{background:#F0FDF4;color:#15803D}
+.tag-video{background:#FAF5FF;color:#7E22CE}
+
+.res-icon{font-size:36px;margin-bottom:12px}
+.res-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:8px}
+.res-desc{font-size:14px;color:var(--muted);line-height:1.5;flex-grow:1;margin-bottom:20px}
+.res-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:700;padding:10px 22px;border-radius:20px;
+  border:none;cursor:pointer;text-decoration:none;transition:transform .1s;
+}
+.res-btn:hover{transform:scale(1.04)}
+.res-btn-primary{background:var(--navy);color:var(--gold)}
+.res-btn-gold{background:var(--gold);color:var(--navy)}
+.res-btn-green{background:var(--emerald);color:#fff}
+.res-free{
+  position:absolute;top:16px;right:16px;
+  background:var(--emerald);color:#fff;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:10px;
+}
+
+/* Featured card */
+.res-card.featured{
+  background:var(--navy);border-color:var(--navy);
+  grid-column:span 2;
+}
+@media(max-width:640px){.res-card.featured{grid-column:span 1}}
+.res-card.featured .res-title{color:#fff}
+.res-card.featured .res-desc{color:var(--lgray)}
+.res-card.featured .res-free{background:var(--gold);color:var(--navy)}
+
+/* ── MODEL GIV EXPLAINER ── */
+#modelo{background:var(--navy)}
+#modelo .section-title{color:#fff}
+#modelo .section-sub{color:var(--lgray)}
+#modelo .section-label{color:var(--gold)}
+
+.giv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.giv-card{
+  background:rgba(255,255,255,.05);border-radius:14px;padding:26px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.giv-num{font-size:40px;font-weight:900;color:var(--gold);margin-bottom:10px;line-height:1}
+.giv-name{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.giv-desc{font-size:14px;color:var(--lgray);line-height:1.5}
+
+.giv-quote{
+  background:rgba(201,168,76,.1);border-left:4px solid var(--gold);
+  border-radius:0 12px 12px 0;padding:24px 28px;margin-top:36px;
+}
+.giv-quote blockquote{
+  font-size:clamp(16px,3vw,20px);font-style:italic;color:#fff;
+  line-height:1.6;margin-bottom:10px;
+}
+.giv-quote cite{font-size:13px;color:var(--gold);font-style:normal;font-weight:600}
+
+/* ── PONENTE ── */
+#ponente{background:var(--light)}
+.ponente-card{
+  background:#fff;border-radius:20px;padding:48px;
+  box-shadow:0 8px 40px rgba(0,0,0,.08);
+  display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;
+}
+.ponente-avatar{
+  min-width:110px;height:110px;background:var(--navy);border-radius:20px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:42px;font-weight:900;color:var(--gold);
+}
+.ponente-name{font-size:26px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.ponente-title{font-size:15px;color:var(--muted);margin-bottom:16px}
+.ponente-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.ponente-tag{
+  background:#EFF6FF;color:#1D4ED8;font-size:12px;font-weight:600;
+  padding:4px 12px;border-radius:12px;
+}
+.ponente-bio{font-size:15px;color:var(--dgray);line-height:1.7;margin-bottom:20px}
+.ponente-links{display:flex;gap:12px;flex-wrap:wrap}
+.plink{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:600;color:var(--navy);text-decoration:none;
+  padding:8px 18px;border-radius:16px;background:#F1F5F9;
+  transition:background .15s;
+}
+.plink:hover{background:#E2E8F0}
+
+/* ── EVENTO ── */
+#evento{background:var(--emerald)}
+.evento-wrap{max-width:800px}
+#evento .section-label{color:rgba(255,255,255,.6)}
+#evento .section-title{color:#fff}
+#evento .section-sub{color:rgba(255,255,255,.8)}
+
+.evento-details{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;margin-bottom:36px;
+}
+.evento-detail{
+  background:rgba(255,255,255,.1);border-radius:12px;padding:18px 20px;
+  border:1px solid rgba(255,255,255,.15);
+}
+.det-label{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.6);font-weight:700;margin-bottom:6px}
+.det-val{font-size:17px;font-weight:700;color:#fff}
+
+.btn-evento{
+  background:#fff;color:var(--emerald);border:none;
+  padding:16px 44px;border-radius:30px;font-size:17px;font-weight:800;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:transform .15s,box-shadow .15s;margin-right:12px;margin-bottom:12px;
+}
+.btn-evento:hover{transform:scale(1.04);box-shadow:0 10px 36px rgba(0,0,0,.2)}
+.btn-evento-outline{
+  background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4);
+  padding:14px 36px;border-radius:30px;font-size:16px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:background .15s;
+}
+.btn-evento-outline:hover{background:rgba(255,255,255,.1)}
+
+/* ── TOOLS PROMO ── */
+#herramientas{background:#fff}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:600px){.tools-grid{grid-template-columns:1fr}}
+.tool-card{
+  border-radius:16px;padding:32px;text-align:center;
+  border:2px solid;transition:transform .2s;cursor:pointer;text-decoration:none;display:block;
+}
+.tool-card:hover{transform:translateY(-4px)}
+.tool-card.quiz{border-color:var(--navy);background:var(--navy)}
+.tool-card.diag{border-color:var(--emerald);background:var(--emerald)}
+.tool-card-icon{font-size:48px;margin-bottom:14px}
+.tool-card-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:8px}
+.tool-card-desc{font-size:14px;color:rgba(255,255,255,.75);margin-bottom:20px;line-height:1.5}
+.tool-card-btn{
+  background:var(--gold);color:var(--navy);
+  padding:10px 28px;border-radius:20px;font-size:14px;font-weight:800;
+  display:inline-block;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--navy);padding:48px 5% 32px;
+  border-top:1px solid rgba(201,168,76,.2);
+}
+.footer-grid{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:36px}
+.footer-brand .fb-logo{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:6px}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.5);max-width:280px;line-height:1.6}
+.footer-links h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:1px}
+.footer-links a{display:block;font-size:14px;color:rgba(255,255,255,.6);text-decoration:none;margin-bottom:8px;transition:color .1s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.08);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p{font-size:13px;color:rgba(255,255,255,.4)}
+.footer-bottom span{color:var(--gold)}
+
+/* Responsive */
+@media(max-width:768px){
+  .hero{padding:60px 5% 70px}
+  .hero-stats{flex-direction:column;gap:20px}
+  .h-stat{border-right:none;padding:0;margin:0}
+  .ponente-card{flex-direction:column;padding:32px}
+  section{padding:52px 5%}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">GIV</div>
+    <div>
+      <div class="nav-name">Modelo GIV®</div>
+      <div class="nav-sub">Kit de recursos · PDIS 2026</div>
+    </div>
+  </div>
+  <a href="#evento" class="nav-cta">Inscríbete →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Kit GIV® · Recursos gratuitos · PDIS 2026</div>
+  <h1>Gobernanza Intercultural<br>para la <em>Generación de Valor Social</em></h1>
+  <p class="hero-sub">Recursos gratuitos para profesionales que gestionan proyectos de impacto social. Diagnóstico, herramientas, presentación y más.</p>
+  <div class="hero-actions">
+    <a href="#recursos" class="btn-hero-primary">Explorar recursos →</a>
+    <a href="#herramientas" class="btn-hero-secondary">Hacer el diagnóstico</a>
+  </div>
+  <div class="hero-stats">
+    <div class="h-stat"><div class="h-stat-num">4</div><div class="h-stat-lbl">Componentes del sistema</div></div>
+    <div class="h-stat"><div class="h-stat-num">+50%</div><div class="h-stat-lbl">Proyectos en conflicto en ALC</div></div>
+    <div class="h-stat"><div class="h-stat-num">1</div><div class="h-stat-lbl">Sistema integrado GIV®</div></div>
+  </div>
+</section>
+
+<!-- HERRAMIENTAS INTERACTIVAS -->
+<section id="herramientas">
+  <div class="section-label">Herramientas gratuitas</div>
+  <h2 class="section-title">Prueba tu nivel ahora</h2>
+  <p class="section-sub">Dos herramientas interactivas para conocer qué tan preparado está tu proyecto para gestionar la confianza comunitaria.</p>
+  <div class="tools-grid">
+    <a href="PDIS2026_Diagnostico_GIV.html" class="tool-card diag" target="_blank">
+      <div class="tool-card-icon">🎯</div>
+      <div class="tool-card-title">Diagnóstico GIV®</div>
+      <div class="tool-card-desc">8 preguntas · 4 minutos · Obtén tu nivel de madurez y recomendaciones personalizadas para tu proyecto.</div>
+      <span class="tool-card-btn">Hacer diagnóstico →</span>
+    </a>
+    <a href="PDIS2026_Quiz_GIV.html" class="tool-card quiz" target="_blank">
+      <div class="tool-card-icon">⚡</div>
+      <div class="tool-card-title">Quiz GIV®</div>
+      <div class="tool-card-desc">5 preguntas · 30 segundos cada una · ¿Cuánto sabes sobre gestión estratégica de confianza?</div>
+      <span class="tool-card-btn">Jugar el Quiz →</span>
+    </a>
+  </div>
+</section>
+
+<!-- RECURSOS -->
+<section id="recursos">
+  <div class="section-label">Kit de recursos</div>
+  <h2 class="section-title">Todo lo que necesitas</h2>
+  <p class="section-sub">Descarga la presentación, usa las herramientas y prepárate para PDIS 2026.</p>
+  <div class="res-grid">
+
+    <div class="res-card featured">
+      <span class="res-free">ACCESO LIBRE</span>
+      <div class="res-tag tag-live">PONENCIA PDIS 2026</div>
+      <div class="res-icon">🏛</div>
+      <div class="res-title">Presentación Magistral — Modelo GIV®</div>
+      <div class="res-desc">18 diapositivas diseñadas para la ponencia de PDIS 2026. Gobernanza Intercultural para la Generación de Valor Social. Disponible en formato PPTX.</div>
+      <a href="ModeloGIV_Presentacion_Magistral.pptx" class="res-btn res-btn-gold" download>Descargar presentación →</a>
+    </div>
+
+    <div class="res-card">
+      <span class="res-free">LIBRE</span>
+      <div class="res-tag tag-pdf">MINI-GUÍA</div>
+      <div class="res-icon">📋</div>
+      <div class="res-title">Mini-Guía · Modelo GIV®</div>
+      <div class="res-desc">1 página con los 4 componentes del sistema, datos clave, diferenciadores y la cita central del Modelo GIV®. Lista para imprimir o compartir.</div>
+      <a href="PDIS2026_MiniGuia_ModeloGIV.html" class="res-btn res-btn-primary" target="_blank">Ver mini-guía →</a>
+    </div>
+
+    <div class="res-card">
+      <span class="res-free">LIBRE</span>
+      <div class="res-tag tag-tool">HERRAMIENTA</div>
+      <div class="res-icon">🎯</div>
+      <div class="res-title">Diagnóstico GIV®</div>
+      <div class="res-desc">Evalúa los 4 componentes del Modelo GIV® en tu proyecto. Obtén tu nivel de madurez y 3 recomendaciones priorizadas.</div>
+      <a href="PDIS2026_Diagnostico_GIV.html" class="res-btn res-btn-green" target="_blank">Abrir diagnóstico →</a>
+    </div>
+
+    <div class="res-card">
+      <span class="res-free">LIBRE</span>
+      <div class="res-tag tag-tool">JUEGO</div>
+      <div class="res-icon">⚡</div>
+      <div class="res-title">Quiz GIV® · 5 preguntas</div>
+      <div class="res-desc">¿Sabes realmente cómo se gestiona la confianza? Pon a prueba tu conocimiento con este quiz de 5 preguntas contra el reloj.</div>
+      <a href="PDIS2026_Quiz_GIV.html" class="res-btn res-btn-primary" target="_blank">Jugar el Quiz →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODELO GIV® -->
+<section id="modelo">
+  <div class="section-label">El sistema</div>
+  <h2 class="section-title">¿Qué es el Modelo GIV®?</h2>
+  <p class="section-sub">Gobernanza Intercultural para la Generación de Valor Social. Un sistema integrado para construir y gestionar la confianza comunitaria en proyectos de impacto social.</p>
+  <div class="giv-grid">
+    <div class="giv-card">
+      <div class="giv-num">01</div>
+      <div class="giv-name">Personas y Comunidades</div>
+      <div class="giv-desc">Mapeo de actores, identificación de intereses y espacios formales de escucha comunitaria.</div>
+    </div>
+    <div class="giv-card">
+      <div class="giv-num">02</div>
+      <div class="giv-name">Instituciones</div>
+      <div class="giv-desc">Articulación de compromisos institucionales con responsables, plazos e indicadores verificables.</div>
+    </div>
+    <div class="giv-card">
+      <div class="giv-num">03</div>
+      <div class="giv-name">Procesos Metodológicos</div>
+      <div class="giv-desc">Protocolos, guías de actuación e indicadores que hacen la gestión social auditable y replicable.</div>
+    </div>
+    <div class="giv-card">
+      <div class="giv-num">04</div>
+      <div class="giv-name">Conocimiento Transferible</div>
+      <div class="giv-desc">Sistematización de aprendizajes y transferencia de capacidades a la comunidad al cierre del proyecto.</div>
+    </div>
+  </div>
+  <div class="giv-quote">
+    <blockquote>"La confianza no es una consecuencia espontánea del proyecto. Es un activo estratégico que debe construirse y gestionarse de manera deliberada."</blockquote>
+    <cite>— Miriam Escobar Espinoza · Modelo GIV®</cite>
+  </div>
+</section>
+
+<!-- PONENTE -->
+<section id="ponente">
+  <div class="section-label">La ponente</div>
+  <h2 class="section-title">Miriam Escobar Espinoza</h2>
+  <div class="ponente-card">
+    <div class="ponente-avatar">ME</div>
+    <div>
+      <div class="ponente-name">Miriam Escobar Espinoza</div>
+      <div class="ponente-title">Economista · Especialista en Gestión Social</div>
+      <div class="ponente-tags">
+        <span class="ponente-tag">Gestión Social</span>
+        <span class="ponente-tag">Sostenibilidad</span>
+        <span class="ponente-tag">Proyectos de Impacto</span>
+        <span class="ponente-tag">América Latina</span>
+        <span class="ponente-tag">PDIS 2026</span>
+      </div>
+      <p class="ponente-bio">Especialista en sostenibilidad social aplicada a proyectos de infraestructura, minería y energía en América Latina. Creadora del Modelo GIV® — Gobernanza Intercultural para la Generación de Valor Social — un sistema integrado para construir y gestionar la confianza comunitaria de manera deliberada y verificable.</p>
+      <div class="ponente-links">
+        <a href="https://www.linkedin.com/in/miriam-soledad-escobar-espinoza-566407200" class="plink" target="_blank">LinkedIn →</a>
+        <a href="mailto:miriam.escobar0601@gmail.com" class="plink">Contacto →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTO -->
+<section id="evento">
+  <div class="evento-wrap">
+    <div class="section-label">El congreso</div>
+    <h2 class="section-title">PDIS 2026</h2>
+    <p class="section-sub">Congreso de Proyectos de Impacto Social — Project Management Institute. La ponencia del Modelo GIV® se presenta en formato online.</p>
+    <div class="evento-details">
+      <div class="evento-detail">
+        <div class="det-label">CONGRESO</div>
+        <div class="det-val">PDIS 2026</div>
+      </div>
+      <div class="evento-detail">
+        <div class="det-label">ORGANIZADO POR</div>
+        <div class="det-val">PMI España</div>
+      </div>
+      <div class="evento-detail">
+        <div class="det-label">FORMATO</div>
+        <div class="det-val">Online · En vivo</div>
+      </div>
+      <div class="evento-detail">
+        <div class="det-label">PONENCIA</div>
+        <div class="det-val">Modelo GIV®</div>
+      </div>
+    </div>
+    <a href="#" onclick="alert('Visita el sitio oficial del congreso PDIS 2026 para inscribirte.')" class="btn-evento">Inscríbete al congreso →</a>
+    <a href="#herramientas" class="btn-evento-outline">Explorar herramientas</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="fb-logo">Modelo GIV®</div>
+      <p>Gobernanza Intercultural para la Generación de Valor Social. Kit de recursos gratuitos para PDIS 2026.</p>
+    </div>
+    <div class="footer-links">
+      <h4>RECURSOS</h4>
+      <a href="PDIS2026_Diagnostico_GIV.html" target="_blank">Diagnóstico GIV®</a>
+      <a href="PDIS2026_Quiz_GIV.html" target="_blank">Quiz GIV®</a>
+      <a href="ModeloGIV_Presentacion_Magistral.pptx" download>Presentación PPTX</a>
+      <a href="PDIS2026_MiniGuia_ModeloGIV.html" target="_blank">Mini-Guía GIV®</a>
+    </div>
+    <div class="footer-links">
+      <h4>CONTACTO</h4>
+      <a href="mailto:miriam.escobar0601@gmail.com">miriam.escobar0601@gmail.com</a>
+      <a href="https://www.linkedin.com/in/miriam-soledad-escobar-espinoza-566407200" target="_blank">LinkedIn</a>
+      <a href="#evento">PDIS 2026</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>Miriam Escobar Espinoza</span> · Modelo GIV® · Todos los derechos reservados</p>
+    <p>Kit creado para <span>PDIS 2026</span> · PMI</p>
+  </div>
+</footer>
+
+</body>
+</html>

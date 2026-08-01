@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico GIV® · ¿Cómo gestiona tu proyecto la confianza?</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A2342; --gold:#C9A84C; --emerald:#1A6B45;
+  --white:#fff; --dgray:#334155; --lgray:#CBD5E1;
+  --muted:#64748B; --light:#F8FAFC; --coral:#C0392B;
+}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:var(--light);
+  color:var(--dgray);
+  min-height:100vh;
+}
+
+/* ── HEADER ── */
+.site-header{
+  background:var(--navy);
+  padding:20px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.header-brand{font-size:15px;font-weight:700;color:var(--gold);letter-spacing:1px}
+.header-sub{font-size:12px;color:var(--lgray);margin-top:2px}
+.header-badge{
+  background:var(--emerald);color:#fff;font-size:12px;font-weight:600;
+  padding:5px 14px;border-radius:20px;white-space:nowrap;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap{background:#E2E8F0;height:5px;width:100%}
+.progress-bar{height:100%;background:var(--gold);transition:width .4s ease}
+
+/* ── MAIN CONTAINER ── */
+.container{max-width:700px;margin:0 auto;padding:40px 24px 80px}
+
+/* ── INTRO CARD ── */
+.intro-card{
+  background:var(--navy);border-radius:20px;padding:44px 40px;
+  text-align:center;margin-bottom:32px;color:#fff;
+}
+.intro-card .tag{font-size:12px;letter-spacing:3px;color:var(--gold);font-weight:700;margin-bottom:16px}
+.intro-card h1{font-size:clamp(22px,5vw,36px);font-weight:800;line-height:1.2;margin-bottom:14px}
+.intro-card h1 em{color:var(--gold);font-style:normal}
+.intro-card p{font-size:16px;color:var(--lgray);line-height:1.6;margin-bottom:28px}
+.intro-card .stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.stat-box{background:rgba(255,255,255,.07);border-radius:12px;padding:14px 20px}
+.stat-num{font-size:26px;font-weight:800;color:var(--gold)}
+.stat-lbl{font-size:12px;color:var(--lgray)}
+.btn-start{
+  background:var(--gold);color:var(--navy);border:none;
+  padding:16px 44px;border-radius:30px;font-size:17px;font-weight:800;
+  cursor:pointer;transition:transform .15s,box-shadow .15s;
+}
+.btn-start:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(201,168,76,.4)}
+
+/* ── QUESTION CARD ── */
+.q-card{
+  background:#fff;border-radius:18px;padding:36px 36px;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);margin-bottom:24px;
+  display:none;animation:slideIn .35s ease;
+}
+.q-card.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.q-component{
+  display:inline-block;font-size:11px;letter-spacing:2px;font-weight:700;
+  padding:4px 12px;border-radius:10px;margin-bottom:14px;
+}
+.comp-1{background:#EFF6FF;color:#1D4ED8}
+.comp-2{background:#F0FDF4;color:#15803D}
+.comp-3{background:#FFF7ED;color:#C2410C}
+.comp-4{background:#FAF5FF;color:#7E22CE}
+
+.q-num{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.q-text{font-size:18px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:28px}
+
+/* Rating scale */
+.rating-wrap{display:flex;flex-direction:column;gap:0}
+.rating-labels{display:flex;justify-content:space-between;margin-bottom:10px}
+.rating-labels span{font-size:12px;color:var(--muted);max-width:120px;line-height:1.3}
+.rating-labels span:last-child{text-align:right}
+.rating-btns{display:flex;gap:10px;justify-content:center}
+.r-btn{
+  width:52px;height:52px;border-radius:50%;border:2px solid var(--lgray);
+  background:#fff;font-size:20px;font-weight:800;cursor:pointer;
+  color:var(--muted);transition:all .15s;flex-shrink:0;
+}
+.r-btn:hover{border-color:var(--navy);color:var(--navy);background:#F1F5F9}
+.r-btn.selected{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+
+/* Navigation */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.btn-prev{
+  background:transparent;border:1px solid var(--lgray);color:var(--muted);
+  padding:10px 24px;border-radius:20px;cursor:pointer;font-size:14px;
+  transition:background .15s;
+}
+.btn-prev:hover{background:#F1F5F9}
+.btn-next-q{
+  background:var(--navy);color:#fff;border:none;
+  padding:12px 28px;border-radius:20px;font-size:15px;font-weight:700;
+  cursor:pointer;transition:transform .1s;opacity:.4;pointer-events:none;
+}
+.btn-next-q.enabled{opacity:1;pointer-events:auto}
+.btn-next-q.enabled:hover{transform:scale(1.04)}
+
+/* ── RESULTS ── */
+.results-section{display:none;animation:slideIn .4s ease}
+.results-section.active{display:block}
+
+.result-hero{
+  background:var(--navy);border-radius:20px;padding:44px 36px;
+  text-align:center;color:#fff;margin-bottom:28px;
+}
+.score-ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 20px}
+.score-ring-wrap svg{transform:rotate(-90deg)}
+.score-track{fill:none;stroke:rgba(255,255,255,.12);stroke-width:10}
+.score-fill{fill:none;stroke:var(--gold);stroke-width:10;stroke-linecap:round;
+  stroke-dasharray:408;stroke-dashoffset:408;transition:stroke-dashoffset 1.2s ease}
+.score-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;
+}
+.score-pct{font-size:36px;font-weight:800;color:var(--gold)}
+.score-label{font-size:12px;color:var(--lgray)}
+
+.result-title-h{font-size:28px;font-weight:800;margin-bottom:8px}
+.result-level-name{font-size:13px;letter-spacing:3px;color:var(--gold);font-weight:700;margin-bottom:12px}
+.result-desc{font-size:16px;color:var(--lgray);line-height:1.6;max-width:480px;margin:0 auto}
+
+/* Component bars */
+.components-card{background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,.07);margin-bottom:20px}
+.comp-card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:20px;letter-spacing:1px;text-transform:uppercase}
+.comp-row{margin-bottom:20px}
+.comp-row-header{display:flex;justify-content:space-between;margin-bottom:6px}
+.comp-name{font-size:14px;font-weight:700;color:var(--dgray)}
+.comp-pct{font-size:14px;font-weight:800;color:var(--navy)}
+.comp-bar-bg{height:10px;background:#E2E8F0;border-radius:5px}
+.comp-bar{height:10px;border-radius:5px;transition:width 1s ease}
+.comp-rec{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.4}
+
+/* Recs card */
+.recs-card{background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,.07);margin-bottom:20px}
+.rec-item{display:flex;gap:14px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #F1F5F9}
+.rec-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.rec-num{
+  min-width:36px;height:36px;border-radius:50%;background:var(--navy);
+  color:var(--gold);font-weight:800;font-size:16px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.rec-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.rec-text{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* CTA card */
+.cta-card{
+  background:var(--emerald);border-radius:16px;padding:32px;
+  text-align:center;color:#fff;
+}
+.cta-card h3{font-size:22px;font-weight:800;margin-bottom:10px}
+.cta-card p{font-size:15px;color:rgba(255,255,255,.85);margin-bottom:24px;line-height:1.5}
+.btn-cta-main{
+  background:var(--gold);color:var(--navy);border:none;
+  padding:14px 40px;border-radius:30px;font-size:16px;font-weight:800;
+  cursor:pointer;transition:transform .15s;margin-right:10px;
+}
+.btn-cta-main:hover{transform:scale(1.04)}
+.btn-retry{
+  background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);
+  padding:13px 28px;border-radius:30px;font-size:14px;cursor:pointer;
+  transition:background .15s;
+}
+.btn-retry:hover{background:rgba(255,255,255,.1)}
+
+.result-footer{text-align:center;margin-top:28px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="header-brand">Diagnóstico GIV®</div>
+    <div class="header-sub">Miriam Escobar Espinoza · PDIS 2026</div>
+  </div>
+  <div class="header-badge">Herramienta gratuita</div>
+</header>
+<div class="progress-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div id="intro-section">
+    <div class="intro-card">
+      <div class="tag">AUTODIAGNÓSTICO · 4 MINUTOS</div>
+      <h1>¿Cómo gestiona tu proyecto<br><em>la confianza comunitaria?</em></h1>
+      <p>8 preguntas. 4 componentes del Modelo GIV®. Obtén tu nivel de madurez en gestión de confianza y recomendaciones personalizadas para tu proyecto.</p>
+      <div class="stats">
+        <div class="stat-box"><div class="stat-num">8</div><div class="stat-lbl">Preguntas</div></div>
+        <div class="stat-box"><div class="stat-num">4</div><div class="stat-lbl">Componentes GIV®</div></div>
+        <div class="stat-box"><div class="stat-num">4'</div><div class="stat-lbl">Minutos</div></div>
+      </div>
+      <button class="btn-start" onclick="startDiag()">Iniciar diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- QUESTIONS (rendered by JS) -->
+  <div id="questions-section"></div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="results-section">
+    <div class="result-hero">
+      <div class="score-ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="score-track" cx="70" cy="70" r="65"/>
+          <circle class="score-fill"  cx="70" cy="70" r="65" id="score-fill-ring"/>
+        </svg>
+        <div class="score-center">
+          <div class="score-pct" id="score-pct-txt">0%</div>
+          <div class="score-label">GIV® Score</div>
+        </div>
+      </div>
+      <div class="result-level-name" id="res-level-name">NIVEL</div>
+      <div class="result-title-h" id="res-title"></div>
+      <div class="result-desc" id="res-desc"></div>
+    </div>
+
+    <div class="components-card">
+      <div class="comp-card-title">Resultados por componente GIV®</div>
+      <div id="comp-bars"></div>
+    </div>
+
+    <div class="recs-card">
+      <div class="comp-card-title">Recomendaciones prioritarias</div>
+      <div id="recs-list"></div>
+    </div>
+
+    <div class="cta-card">
+      <h3>Conoce el Modelo GIV® completo en PDIS 2026</h3>
+      <p>Miriam Escobar Espinoza presentará el sistema completo para construir y gestionar la confianza comunitaria en proyectos de impacto social.</p>
+      <button class="btn-cta-main" onclick="goToPDIS()">Inscríbete al congreso →</button>
+      <button class="btn-retry" onclick="retryDiag()">Repetir diagnóstico</button>
+    </div>
+    <div class="result-footer">Diagnóstico elaborado por Miriam Escobar Espinoza · Especialista en Gestión Social · PDIS 2026</div>
+  </div>
+
+</div>
+
+<script>
+// ── QUESTIONS DATA ─────────────────────────────────────────────────
+const COMPONENTS = [
+  { id:'comp-1', name:'Personas y Comunidades',    cls:'comp-1', color:'#1D4ED8' },
+  { id:'comp-2', name:'Instituciones',             cls:'comp-2', color:'#15803D' },
+  { id:'comp-3', name:'Procesos Metodológicos',    cls:'comp-3', color:'#C2410C' },
+  { id:'comp-4', name:'Conocimiento Transferible', cls:'comp-4', color:'#7E22CE' },
+];
+
+const QUESTIONS = [
+  { comp:0, text:'¿Tu proyecto tiene identificados y documentados los actores comunitarios clave — sus intereses, necesidades y posibles resistencias?',
+    lo:'No existe ningún mapeo de actores', hi:'Sí, tenemos un mapeo detallado, actualizado y validado con la comunidad' },
+  { comp:0, text:'¿Tu proyecto cuenta con espacios formales y recurrentes para escuchar a la comunidad, más allá de los eventos de consulta previa?',
+    lo:'No existen espacios sistemáticos de escucha', hi:'Sí, con frecuencia definida, metodología y actas de seguimiento' },
+  { comp:1, text:'¿Los compromisos institucionales del proyecto — con comunidades, autoridades y organismos — están documentados con responsables y plazos definidos?',
+    lo:'No están formalmente documentados', hi:'Sí, con un registro activo que se monitorea periódicamente' },
+  { comp:1, text:'¿Las instituciones involucradas en el proyecto están alineadas en un propósito común compartido con la comunidad?',
+    lo:'Cada institución trabaja de forma independiente', hi:'Sí, con articulación formal, reuniones conjuntas y metas compartidas' },
+  { comp:2, text:'¿Tu proyecto dispone de procesos metodológicos verificables para la gestión social — protocolos, guías de actuación e indicadores?',
+    lo:'Se trabaja caso a caso, sin metodología establecida', hi:'Sí, con protocolos documentados y equipo capacitado en su aplicación' },
+  { comp:2, text:'¿La gestión social de tu proyecto puede ser auditada o verificada por un tercero independiente?',
+    lo:'No, los registros son insuficientes para una auditoría', hi:'Sí, contamos con evidencia completa, trazable y accesible' },
+  { comp:3, text:'¿El conocimiento y las lecciones aprendidas en tu proyecto se documentan de forma que puedan aplicarse en proyectos futuros?',
+    lo:'No, el conocimiento queda en las personas del equipo', hi:'Sí, tenemos sistematización formal accesible para toda la organización' },
+  { comp:3, text:'¿La comunidad y las instituciones locales quedarán con capacidades instaladas para gestionar compromisos de manera autónoma al cierre del proyecto?',
+    lo:'No está previsto en el diseño del proyecto', hi:'Sí, es un resultado central del diseño del proyecto' },
+];
+
+const LEVELS = [
+  { min:0,  max:39,  name:'NIVEL 1 — CRÍTICO',     title:'Tu proyecto opera sobre arena',
+    desc:'La gestión de confianza no está sistematizada. Los riesgos de conflicto comunitario son altos. Se requiere acción inmediata para construir las bases del sistema.',
+    color:'#D63031' },
+  { min:40, max:59,  name:'NIVEL 2 — EN DESARROLLO', title:'Construyendo, pero sin sistema integrado',
+    desc:'Hay esfuerzos valiosos en gestión social, pero operan como silos. La confianza se construye de forma fragmentada. El Modelo GIV® puede integrarlo todo.',
+    color:'#D68910' },
+  { min:60, max:79,  name:'NIVEL 3 — AVANZADO',    title:'En camino al Modelo GIV®',
+    desc:'Tu proyecto tiene una base sólida. Falta integrar los componentes y formalizarlos. Con ajustes metodológicos, puedes alcanzar gestión sistemática de confianza.',
+    color:'#2980B9' },
+  { min:80, max:100, name:'NIVEL 4 — ÓPTIMO',       title:'Listo para certificación GIV®',
+    desc:'Tu proyecto gestiona la confianza de forma deliberada y sistémica. Es un referente de buenas prácticas en sostenibilidad social. El Modelo GIV® es tu marco.',
+    color:'#27AE60' },
+];
+
+const COMP_RECS = [
+  [ 'Diseña un mapeo de actores comunitarios con roles, intereses y niveles de influencia.',
+    'Crea espacios periódicos de escucha con la comunidad — mínimo trimestrales con agenda y actas.' ],
+  [ 'Implementa un registro formal de compromisos con responsables, plazos e indicadores de cumplimiento.',
+    'Organiza reuniones conjuntas con todas las instituciones involucradas al menos dos veces por año.' ],
+  [ 'Documenta los protocolos de actuación social y capacita al equipo en su aplicación consistente.',
+    'Diseña un sistema de registro que permita la verificación externa de la gestión social.' ],
+  [ 'Crea un sistema de gestión del conocimiento que capture lecciones aprendidas en cada etapa.',
+    'Diseña un plan de transferencia de capacidades a la comunidad como parte del cierre del proyecto.' ],
+];
+
+// ── STATE ──────────────────────────────────────────────────────────
+let answers = new Array(QUESTIONS.length).fill(0);
+let currentQ = 0;
+
+// ── BUILD QUESTIONS ───────────────────────────────────────────────
+function buildQuestions(){
+  const sec = document.getElementById('questions-section');
+  sec.innerHTML = '';
+  QUESTIONS.forEach((q,i)=>{
+    const comp = COMPONENTS[q.comp];
+    const card = document.createElement('div');
+    card.className = 'q-card' + (i===0?' active':'');
+    card.id = `qcard-${i}`;
+    card.innerHTML = `
+      <span class="q-component ${comp.cls}">${comp.name}</span>
+      <div class="q-num">Pregunta ${i+1} de ${QUESTIONS.length}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="rating-wrap">
+        <div class="rating-labels">
+          <span>${q.lo}</span>
+          <span>${q.hi}</span>
+        </div>
+        <div class="rating-btns">
+          ${[1,2,3,4,5].map(v=>`<button class="r-btn" data-q="${i}" data-v="${v}" onclick="rate(${i},${v})">${v}</button>`).join('')}
+        </div>
+      </div>
+      <div class="q-nav">
+        <button class="btn-prev" onclick="prevQ(${i})" ${i===0?'style="visibility:hidden"':''}>← Anterior</button>
+        <button class="btn-next-q" id="next-${i}" onclick="nextQ(${i})">${i===QUESTIONS.length-1?'Ver resultados →':'Siguiente →'}</button>
+      </div>`;
+    sec.appendChild(card);
+  });
+}
+
+function rate(qIdx, val){
+  answers[qIdx] = val;
+  document.querySelectorAll(`.r-btn[data-q="${qIdx}"]`).forEach(b=>{
+    b.classList.toggle('selected', parseInt(b.dataset.v)===val);
+  });
+  document.getElementById(`next-${qIdx}`).classList.add('enabled');
+  updateProgress(qIdx);
+}
+
+function updateProgress(idx){
+  const pct = Math.round(((idx + (answers[idx]>0?1:0)) / QUESTIONS.length)*100);
+  document.getElementById('prog-bar').style.width = pct+'%';
+}
+
+function prevQ(idx){
+  if(idx===0) return;
+  document.getElementById(`qcard-${idx}`).classList.remove('active');
+  document.getElementById(`qcard-${idx-1}`).classList.add('active');
+  currentQ = idx-1;
+}
+
+function nextQ(idx){
+  if(answers[idx]===0) return;
+  if(idx===QUESTIONS.length-1){ showResults(); return; }
+  document.getElementById(`qcard-${idx}`).classList.remove('active');
+  document.getElementById(`qcard-${idx+1}`).classList.add('active');
+  currentQ = idx+1;
+}
+
+// ── START ──────────────────────────────────────────────────────────
+function startDiag(){
+  document.getElementById('intro-section').style.display='none';
+  buildQuestions();
+  document.getElementById('questions-section').style.display='block';
+}
+
+// ── RESULTS ────────────────────────────────────────────────────────
+function showResults(){
+  document.getElementById('questions-section').style.display='none';
+  document.getElementById('prog-bar').style.width='100%';
+
+  const totalScore = answers.reduce((s,v)=>s+v,0);
+  const maxScore   = QUESTIONS.length * 5; // 40
+  const pct        = Math.round((totalScore/maxScore)*100);
+
+  const level = LEVELS.find(l=>pct>=l.min && pct<=l.max) || LEVELS[0];
+
+  document.getElementById('score-pct-txt').textContent = pct+'%';
+  document.getElementById('res-level-name').textContent = level.name;
+  document.getElementById('res-title').textContent = level.title;
+  document.getElementById('res-desc').textContent  = level.desc;
+
+  // Animate ring
+  const CIRC = 2 * Math.PI * 65; // ≈ 408
+  setTimeout(()=>{
+    document.getElementById('score-fill-ring').style.strokeDashoffset = CIRC*(1-pct/100);
+    document.getElementById('score-fill-ring').style.stroke = level.color;
+  }, 200);
+
+  // Component bars
+  const barsHtml = COMPONENTS.map((comp,ci)=>{
+    const qs = QUESTIONS.filter((_,i)=>QUESTIONS[i].comp===ci);
+    const qIdxs = QUESTIONS.reduce((acc,q,i)=>{ if(q.comp===ci) acc.push(i); return acc; },[]);
+    const compScore = qIdxs.reduce((s,i)=>s+answers[i],0);
+    const compMax   = qIdxs.length * 5;
+    const cpct      = Math.round((compScore/compMax)*100);
+    return `
+      <div class="comp-row">
+        <div class="comp-row-header">
+          <span class="comp-name">${comp.name}</span>
+          <span class="comp-pct">${cpct}%</span>
+        </div>
+        <div class="comp-bar-bg">
+          <div class="comp-bar" style="width:0%;background:${comp.color}" data-target="${cpct}"></div>
+        </div>
+        <div class="comp-rec">${cpct<60 ? '⚠ Área prioritaria de mejora' : cpct<80 ? '→ Buen avance, consolidar' : '✓ Componente fortalecido'}</div>
+      </div>`;
+  }).join('');
+  document.getElementById('comp-bars').innerHTML = barsHtml;
+
+  // Animate bars
+  setTimeout(()=>{
+    document.querySelectorAll('.comp-bar').forEach(b=>{
+      b.style.transition='width 1s ease';
+      b.style.width = b.dataset.target+'%';
+    });
+  }, 300);
+
+  // Recommendations
+  const weakComps = COMPONENTS.map((comp,ci)=>{
+    const qIdxs = QUESTIONS.reduce((acc,q,i)=>{ if(q.comp===ci) acc.push(i); return acc;},[]);
+    const cpct = Math.round((qIdxs.reduce((s,i)=>s+answers[i],0)/(qIdxs.length*5))*100);
+    return {ci, cpct};
+  }).sort((a,b)=>a.cpct-b.cpct).slice(0,3);
+
+  let recIdx=1;
+  document.getElementById('recs-list').innerHTML = weakComps.map(({ci, cpct})=>{
+    const recs = COMP_RECS[ci];
+    return recs.map(r=>`
+      <div class="rec-item">
+        <div class="rec-num">${recIdx++}</div>
+        <div>
+          <div class="rec-title">${COMPONENTS[ci].name}</div>
+          <div class="rec-text">${r}</div>
+        </div>
+      </div>`).join('');
+  }).join('');
+
+  document.getElementById('results-section').classList.add('active');
+}
+
+function retryDiag(){
+  answers = new Array(QUESTIONS.length).fill(0);
+  document.getElementById('results-section').classList.remove('active');
+  document.getElementById('prog-bar').style.width='0%';
+  buildQuestions();
+  document.getElementById('questions-section').style.display='block';
+}
+
+function goToPDIS(){
+  alert('Visita pdiscongreso.org o busca "PDIS 2026" para inscribirte.\n\nPonencia: "Gobernanza Intercultural para la Generación de Valor Social"\nPonente: Miriam Escobar Espinoza');
+}
+</script>
+</body>
+</html>

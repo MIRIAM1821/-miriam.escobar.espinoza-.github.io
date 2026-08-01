@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz GIV® · ¿Estás listo para gestionar la confianza?</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:#0A2342;
+  color:#fff;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  padding:16px;
+}
+
+/* ── SCREENS ── */
+.screen{display:none;width:100%;max-width:780px;text-align:center;animation:fadeIn .4s ease}
+.screen.active{display:flex;flex-direction:column;align-items:center}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── INTRO ── */
+.logo{font-size:14px;letter-spacing:4px;color:#C9A84C;text-transform:uppercase;margin-bottom:8px}
+.title-main{font-size:clamp(28px,6vw,52px);font-weight:800;line-height:1.1;margin-bottom:12px}
+.title-main span{color:#C9A84C}
+.subtitle{font-size:17px;color:#CBD5E1;margin-bottom:40px;max-width:520px;line-height:1.5}
+.badge{display:inline-block;background:#1A6B45;color:#fff;font-size:13px;font-weight:600;
+  padding:6px 18px;border-radius:20px;margin-bottom:32px;letter-spacing:1px}
+
+.btn-start{
+  background:#C9A84C;color:#0A2342;font-size:20px;font-weight:800;
+  border:none;padding:18px 52px;border-radius:40px;cursor:pointer;
+  transition:transform .15s,box-shadow .15s;letter-spacing:.5px;
+}
+.btn-start:hover{transform:scale(1.04);box-shadow:0 8px 32px rgba(201,168,76,.4)}
+
+.rules{margin-top:36px;display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.rule{background:rgba(255,255,255,.06);border-radius:12px;padding:14px 20px;
+  font-size:14px;color:#CBD5E1;border:1px solid rgba(255,255,255,.1)}
+.rule strong{display:block;font-size:22px;color:#C9A84C;margin-bottom:4px}
+
+/* ── QUESTION ── */
+.q-header{width:100%;display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px}
+.q-number{font-size:14px;color:#CBD5E1;letter-spacing:2px}
+.q-score-display{font-size:14px;color:#C9A84C;font-weight:700}
+
+/* Timer */
+.timer-wrap{position:relative;width:80px;height:80px;margin:0 auto 24px}
+.timer-ring{width:80px;height:80px;transform:rotate(-90deg)}
+.timer-track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:6}
+.timer-fill{fill:none;stroke:#C9A84C;stroke-width:6;stroke-linecap:round;
+  stroke-dasharray:220;stroke-dashoffset:0;transition:stroke .5s,stroke-dashoffset 1s linear}
+.timer-num{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:26px;font-weight:800;color:#fff;
+}
+
+/* Question text */
+.q-text{font-size:clamp(16px,3vw,22px);font-weight:700;line-height:1.4;
+  margin-bottom:32px;max-width:660px;background:rgba(255,255,255,.05);
+  padding:24px 28px;border-radius:16px;border-left:4px solid #C9A84C}
+
+/* Answer grid */
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-bottom:20px}
+@media(max-width:560px){.answers{grid-template-columns:1fr}}
+
+.ans-btn{
+  border:none;border-radius:12px;padding:18px 20px;cursor:pointer;
+  font-size:15px;font-weight:600;color:#fff;text-align:left;
+  display:flex;align-items:center;gap:12px;
+  transition:transform .1s,filter .1s;position:relative;overflow:hidden;
+  min-height:70px;line-height:1.3;
+}
+.ans-btn:hover:not(:disabled){transform:scale(1.02);filter:brightness(1.1)}
+.ans-btn:disabled{cursor:default}
+.ans-btn .letter{
+  min-width:34px;height:34px;border-radius:8px;background:rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;
+}
+.ans-a{background:#D63031}
+.ans-b{background:#2980B9}
+.ans-c{background:#D68910}
+.ans-d{background:#27AE60}
+
+.ans-btn.correct{outline:4px solid #fff;filter:brightness(1.15);transform:scale(1.03)}
+.ans-btn.wrong{opacity:.4;transform:scale(.97)}
+
+/* Feedback */
+.feedback{
+  background:rgba(255,255,255,.08);border-radius:14px;padding:18px 22px;
+  margin-bottom:16px;width:100%;text-align:left;border-left:4px solid #C9A84C;
+  display:none;
+}
+.feedback.show{display:block;animation:fadeIn .3s ease}
+.feedback .fb-label{font-size:12px;letter-spacing:2px;color:#C9A84C;font-weight:700;margin-bottom:6px}
+.feedback p{font-size:15px;color:#CBD5E1;line-height:1.5}
+
+.btn-next{
+  background:#C9A84C;color:#0A2342;border:none;padding:14px 40px;border-radius:30px;
+  font-size:16px;font-weight:800;cursor:pointer;display:none;
+  transition:transform .15s;margin-top:8px;
+}
+.btn-next:hover{transform:scale(1.04)}
+.btn-next.show{display:inline-block}
+
+/* Progress bar */
+.progress-bar{width:100%;height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:28px}
+.progress-fill{height:100%;background:#C9A84C;border-radius:3px;transition:width .4s ease}
+
+/* ── RESULTS ── */
+.result-icon{font-size:72px;margin-bottom:16px}
+.result-title{font-size:32px;font-weight:800;margin-bottom:8px}
+.result-score{font-size:64px;font-weight:800;color:#C9A84C;line-height:1}
+.result-sub{font-size:18px;color:#CBD5E1;margin-bottom:32px;margin-top:6px}
+
+.result-level{
+  background:rgba(255,255,255,.06);border-radius:16px;padding:24px 28px;
+  width:100%;max-width:520px;margin-bottom:28px;border:1px solid rgba(201,168,76,.3);
+}
+.level-name{font-size:14px;letter-spacing:2px;color:#C9A84C;font-weight:700;margin-bottom:6px}
+.level-desc{font-size:16px;color:#CBD5E1;line-height:1.5}
+
+.result-cta{
+  background:#1A6B45;color:#fff;border:none;padding:16px 44px;border-radius:30px;
+  font-size:17px;font-weight:700;cursor:pointer;transition:transform .15s;margin-bottom:14px;
+}
+.result-cta:hover{transform:scale(1.04)}
+.result-retry{
+  background:transparent;color:#CBD5E1;border:1px solid rgba(255,255,255,.2);
+  padding:12px 32px;border-radius:30px;font-size:15px;cursor:pointer;
+  transition:background .15s;
+}
+.result-retry:hover{background:rgba(255,255,255,.08)}
+
+.answer-review{width:100%;margin-bottom:28px}
+.review-item{
+  background:rgba(255,255,255,.05);border-radius:10px;padding:14px 18px;
+  margin-bottom:10px;text-align:left;display:flex;gap:14px;align-items:flex-start;
+  border-left:4px solid;
+}
+.review-item.ok{border-color:#27AE60}
+.review-item.fail{border-color:#D63031}
+.review-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.review-q{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.review-a{font-size:13px;color:#CBD5E1}
+
+/* confetti canvas */
+#confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* footer */
+.quiz-footer{margin-top:24px;font-size:12px;color:#475569;text-align:center}
+.quiz-footer span{color:#C9A84C}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<!-- ── INTRO ── -->
+<div class="screen active" id="screen-intro">
+  <div class="logo">Modelo GIV® · PDIS 2026</div>
+  <h1 class="title-main">¿Estás listo para<br><span>gestionar la confianza?</span></h1>
+  <p class="subtitle">5 preguntas · 30 segundos cada una · Más rápido = más puntos</p>
+  <span class="badge">Quiz interactivo · Miriam Escobar Espinoza</span>
+  <button class="btn-start" onclick="startQuiz()">Iniciar Quiz</button>
+  <div class="rules">
+    <div class="rule"><strong>5</strong>Preguntas</div>
+    <div class="rule"><strong>30s</strong>Por pregunta</div>
+    <div class="rule"><strong>1000</strong>Puntos máx.</div>
+  </div>
+</div>
+
+<!-- ── QUESTION ── -->
+<div class="screen" id="screen-question">
+  <div class="q-header">
+    <span class="q-number" id="q-number">Pregunta 1 / 5</span>
+    <span class="q-score-display">Puntos: <span id="live-score">0</span></span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="timer-wrap">
+    <svg class="timer-ring" viewBox="0 0 80 80">
+      <circle class="timer-track" cx="40" cy="40" r="35"/>
+      <circle class="timer-fill" id="timer-ring-fill" cx="40" cy="40" r="35"/>
+    </svg>
+    <div class="timer-num" id="timer-num">30</div>
+  </div>
+  <div class="q-text" id="q-text"></div>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback">
+    <div class="fb-label">DATO CLAVE</div>
+    <p id="feedback-text"></p>
+  </div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">Siguiente →</button>
+</div>
+
+<!-- ── RESULTS ── -->
+<div class="screen" id="screen-results">
+  <div class="result-icon" id="result-icon">🏆</div>
+  <div class="result-title" id="result-title">¡Excelente!</div>
+  <div class="result-score" id="result-score">0</div>
+  <div class="result-sub" id="result-sub">puntos de 5000</div>
+  <div class="result-level" id="result-level">
+    <div class="level-name" id="level-name">NIVEL</div>
+    <div class="level-desc" id="level-desc"></div>
+  </div>
+  <h3 style="margin-bottom:16px;font-size:15px;color:#CBD5E1;width:100%">Resumen de respuestas</h3>
+  <div class="answer-review" id="answer-review"></div>
+  <button class="result-cta" onclick="goToPDIS()">Ver PDIS 2026 →</button>
+  <button class="result-retry" onclick="restartQuiz()">Jugar de nuevo</button>
+</div>
+
+<div class="quiz-footer">Quiz creado por <span>Miriam Escobar Espinoza</span> para PDIS 2026</div>
+
+<script>
+// ── QUESTIONS ──────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    q: 'Un proyecto con buen presupuesto y equipo técnico calificado genera la confianza de la comunidad de forma natural. ¿Esto es…?',
+    opts: [
+      'Verdadero — un buen trabajo técnico genera confianza automáticamente',
+      'Falso — la confianza debe construirse de manera deliberada desde el inicio',
+      'Depende del tipo de comunidad y del contexto cultural',
+      'Solo aplica en proyectos de más de tres años de duración',
+    ],
+    correct: 1,
+    fact: 'La confianza es un activo estratégico, no un subproducto de la ejecución técnica. Requiere gestión deliberada, intencional y sostenida desde el primer día del proyecto.',
+  },
+  {
+    q: '¿Cuál es el error más frecuente en la gestión social de proyectos de infraestructura y desarrollo?',
+    opts: [
+      'No destinar suficiente presupuesto al componente social',
+      'No contratar suficientes especialistas en gestión social',
+      'Gestionar el diálogo, los compromisos y la participación como silos separados',
+      'Iniciar tarde los procesos de consulta previa',
+    ],
+    correct: 2,
+    fact: 'El problema central no es de presupuesto ni de cantidad de personal, sino de integración. Cuando diálogo, compromisos y participación operan sin conexión, la confianza no se acumula aunque cada área funcione bien por separado.',
+  },
+  {
+    q: 'Una consulta previa exitosa garantiza la confianza de la comunidad en el proyecto. ¿Esta afirmación es…?',
+    opts: [
+      'Correcta — la consulta previa es el instrumento central de generación de confianza',
+      'Parcialmente correcta — es necesaria pero no suficiente por sí sola',
+      'Incorrecta — la consulta previa tiene poco impacto en la confianza real',
+      'Solo aplica legalmente para comunidades indígenas reconocidas',
+    ],
+    correct: 1,
+    fact: 'La consulta es una condición necesaria, pero no suficiente. Sin articulación institucional, sin procesos metodológicos verificables y sin transferencia de conocimiento, la confianza no se consolida aunque la consulta sea ejemplar.',
+  },
+  {
+    q: '¿Qué porcentaje aproximado de proyectos sociales en América Latina enfrenta conflictos significativos con comunidades durante su ejecución?',
+    opts: [
+      'Menos del 20% — son casos aislados y excepcionales',
+      'Entre el 25% y el 35% — es una incidencia moderada',
+      'Alrededor del 45% — casi la mitad de los proyectos',
+      'Más del 50% — más de la mitad enfrenta conflictos comunitarios',
+    ],
+    correct: 3,
+    fact: 'Según reportes del BID y la IFC, más del 50% de los proyectos de infraestructura en América Latina enfrenta conflictos sociales significativos. El costo promedio de un proyecto paralizado por conflicto comunitario supera los USD 20 millones.',
+  },
+  {
+    q: 'Según el Modelo GIV®, la confianza comunitaria en un proyecto de impacto social es:',
+    opts: [
+      'Una consecuencia espontánea de ejecutar correctamente la obra o el servicio',
+      'Un indicador de satisfacción que se mide únicamente al cierre del proyecto',
+      'Responsabilidad exclusiva del área de comunicaciones y relaciones comunitarias',
+      'Un activo estratégico que debe construirse y gestionarse de manera deliberada',
+    ],
+    correct: 3,
+    fact: 'El Modelo GIV® — Gobernanza Intercultural para la Generación de Valor Social — define la confianza como un activo estratégico que debe gestionarse desde el diseño, no esperarse como resultado espontáneo de la ejecución.',
+  },
+];
+
+const LEVELS = [
+  { min:0,    max:1000,  icon:'📚', title:'Sigue aprendiendo',   name:'NIVEL INICIAL',   desc:'El camino hacia la gestión de confianza comienza con entender que es una disciplina, no un don natural. El Modelo GIV® es tu próximo paso.' },
+  { min:1001, max:2500,  icon:'📈', title:'¡Vas bien!',          name:'NIVEL EN DESARROLLO', desc:'Tienes intuición correcta sobre la gestión de confianza. Falta consolidar el sistema. El Modelo GIV® te da la estructura que buscas.' },
+  { min:2501, max:4000,  icon:'🎯', title:'¡Muy bien!',          name:'NIVEL AVANZADO',  desc:'Comprendes los principios clave de la gestión de confianza. Aplicar el Modelo GIV® te llevará del conocimiento a la práctica sistemática.' },
+  { min:4001, max:5000,  icon:'🏆', title:'¡Experto GIV®!',      name:'NIVEL EXPERTO',   desc:'Dominas los fundamentos de la gestión estratégica de confianza. Estás listo para conocer el Modelo GIV® completo en PDIS 2026.' },
+];
+
+// ── STATE ──────────────────────────────────────────────────────────
+let current=0, score=0, timeLeft=30, timerInterval=null, answered=false;
+let userAnswers=[];
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function $(id){ return document.getElementById(id); }
+
+// ── TIMER ─────────────────────────────────────────────────────────
+const CIRCUMFERENCE = 2 * Math.PI * 35; // ~220
+
+function updateTimer(){
+  const pct = timeLeft / 30;
+  $('timer-ring-fill').style.strokeDashoffset = CIRCUMFERENCE * (1-pct);
+  $('timer-ring-fill').style.stroke = timeLeft <= 8 ? '#D63031' : '#C9A84C';
+  $('timer-num').textContent = timeLeft;
+}
+
+function startTimer(){
+  timeLeft=30; answered=false;
+  updateTimer();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft<=0){ clearInterval(timerInterval); selectAnswer(-1); }
+  },1000);
+}
+
+// ── QUIZ FLOW ─────────────────────────────────────────────────────
+function startQuiz(){
+  current=0; score=0; userAnswers=[];
+  show('screen-question');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  $('q-number').textContent = `Pregunta ${current+1} / ${QUESTIONS.length}`;
+  $('live-score').textContent = score.toLocaleString();
+  $('progress-fill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  $('q-text').textContent = q.q;
+
+  const letters = ['A','B','C','D'];
+  const colors  = ['ans-a','ans-b','ans-c','ans-d'];
+  const grid    = $('answers');
+  grid.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className = `ans-btn ${colors[i]}`;
+    btn.innerHTML = `<span class="letter">${letters[i]}</span>${opt}`;
+    btn.onclick = ()=>selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  $('feedback').classList.remove('show');
+  $('btn-next').classList.remove('show');
+  startTimer();
+}
+
+function selectAnswer(idx){
+  if(answered) return;
+  answered=true;
+  clearInterval(timerInterval);
+
+  const q = QUESTIONS[current];
+  const btns = $('answers').querySelectorAll('.ans-btn');
+  btns.forEach(b=>b.disabled=true);
+
+  let pts=0;
+  if(idx === q.correct){
+    pts = Math.max(200, Math.round((timeLeft/30)*1000));
+    score += pts;
+    btns[idx].classList.add('correct');
+  } else {
+    if(idx>=0) btns[idx].classList.add('wrong');
+    btns[q.correct].classList.add('correct');
+  }
+
+  userAnswers.push({qIdx:current, chosen:idx, pts});
+
+  $('live-score').textContent = score.toLocaleString();
+  $('feedback-text').textContent = q.fact;
+  $('feedback').classList.add('show');
+  $('btn-next').textContent = current < QUESTIONS.length-1 ? 'Siguiente →' : 'Ver resultados →';
+  $('btn-next').classList.add('show');
+}
+
+function nextQuestion(){
+  current++;
+  if(current >= QUESTIONS.length){ showResults(); return; }
+  renderQuestion();
+}
+
+function showResults(){
+  show('screen-results');
+  $('progress-fill').style.width='100%';
+
+  const correct = userAnswers.filter(a=>a.pts>0).length;
+  const level   = LEVELS.find(l=>score>=l.min && score<=l.max) || LEVELS[0];
+
+  $('result-icon').textContent = level.icon;
+  $('result-title').textContent = level.title;
+  $('result-score').textContent = score.toLocaleString();
+  $('result-sub').textContent   = `puntos · ${correct} / ${QUESTIONS.length} correctas`;
+  $('level-name').textContent   = level.name;
+  $('level-desc').textContent   = level.desc;
+
+  // Answer review
+  const rev = $('answer-review');
+  rev.innerHTML='';
+  QUESTIONS.forEach((q,i)=>{
+    const ua = userAnswers[i];
+    const ok = ua && ua.pts>0;
+    rev.innerHTML += `
+      <div class="review-item ${ok?'ok':'fail'}">
+        <span class="review-icon">${ok?'✓':'✗'}</span>
+        <div>
+          <div class="review-q">${q.q}</div>
+          <div class="review-a">${ok?'Correcto' : 'Respuesta correcta: '+q.opts[q.correct]}</div>
+        </div>
+      </div>`;
+  });
+
+  if(correct===5) launchConfetti();
+}
+
+function restartQuiz(){ startQuiz(); }
+function goToPDIS(){ alert('Visita el sitio del congreso PDIS 2026 para inscribirte.\n\nPonente: Miriam Escobar Espinoza\nTema: Gobernanza Intercultural para la Generación de Valor Social'); }
+
+// ── CONFETTI ──────────────────────────────────────────────────────
+function launchConfetti(){
+  const canvas = $('confetti'), ctx = canvas.getContext('2d');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const pieces=[], COLORS=['#C9A84C','#1A6B45','#fff','#D63031','#3498DB'];
+  for(let i=0;i<120;i++) pieces.push({x:Math.random()*canvas.width,y:-20,r:Math.random()*8+4,
+    col:COLORS[i%COLORS.length],spd:Math.random()*3+2,ang:Math.random()*2*Math.PI,rot:0,rspd:(Math.random()-.5)*.2});
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle=p.col; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.restore();
+      p.y+=p.spd; p.x+=Math.sin(p.ang+frame*.02)*1.5; p.rot+=p.rspd;
+      if(p.y>canvas.height) p.y=-20;
+    });
+    frame++;
+    if(frame<300) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>

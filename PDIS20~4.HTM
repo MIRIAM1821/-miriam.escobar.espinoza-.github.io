@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini-Guía · Modelo GIV® · Miriam Escobar Espinoza</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --navy:#0A2342; --gold:#C9A84C; --emerald:#1A6B45;
+  --white:#fff;   --light:#F8FAFC; --dgray:#334155;
+  --lgray:#CBD5E1; --muted:#64748B;
+}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#E8ECEF;
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 16px;
+  min-height:100vh;
+}
+
+/* ── PRINT BUTTON (screen only) ── */
+.print-bar{
+  width:100%;max-width:794px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:20px;
+}
+.print-bar h3{font-size:14px;font-weight:600;color:#475569}
+.btn-print{
+  background:var(--navy);color:var(--gold);border:none;
+  padding:10px 24px;border-radius:20px;font-size:14px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+  transition:transform .1s;
+}
+.btn-print:hover{transform:scale(1.04)}
+
+/* ── PAGE (A4 ratio) ── */
+.page{
+  width:794px;          /* A4 @ 96dpi */
+  min-height:1123px;
+  background:#fff;
+  box-shadow:0 8px 48px rgba(0,0,0,.18);
+  border-radius:4px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ── HEADER ── */
+.page-header{
+  background:var(--navy);
+  padding:32px 44px 28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  position:relative;
+  overflow:hidden;
+}
+.page-header::after{
+  content:'GIV';
+  position:absolute;right:-20px;top:-24px;
+  font-size:180px;font-weight:900;
+  color:rgba(255,255,255,.04);
+  line-height:1;pointer-events:none;
+}
+.header-left{}
+.header-tag{
+  font-size:10px;letter-spacing:3px;font-weight:700;
+  color:var(--gold);margin-bottom:8px;
+}
+.header-title{
+  font-size:28px;font-weight:900;color:#fff;
+  line-height:1.15;margin-bottom:6px;
+}
+.header-title em{color:var(--gold);font-style:normal}
+.header-sub{font-size:13px;color:var(--lgray);line-height:1.5;max-width:380px}
+
+.header-badge{
+  background:var(--emerald);border-radius:12px;
+  padding:14px 20px;text-align:right;flex-shrink:0;
+}
+.badge-label{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:4px}
+.badge-val{font-size:16px;font-weight:800;color:#fff}
+
+/* ── BODY ── */
+.page-body{
+  flex:1;
+  padding:32px 44px;
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:28px;
+}
+
+/* Left main column */
+.col-main{}
+
+/* Section label */
+.s-label{
+  font-size:9px;letter-spacing:3px;font-weight:700;
+  color:var(--gold);text-transform:uppercase;margin-bottom:10px;
+}
+.s-title{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:14px}
+
+/* Components */
+.components-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;
+}
+.comp-card{
+  border-radius:10px;padding:16px 18px;
+  border-left:4px solid;
+}
+.comp-card.c1{background:#EFF6FF;border-color:#2563EB}
+.comp-card.c2{background:#F0FDF4;border-color:var(--emerald)}
+.comp-card.c3{background:#FFF7ED;border-color:#EA580C}
+.comp-card.c4{background:#FAF5FF;border-color:#7C3AED}
+
+.comp-num{
+  font-size:22px;font-weight:900;margin-bottom:4px;
+}
+.c1 .comp-num{color:#2563EB}
+.c2 .comp-num{color:var(--emerald)}
+.c3 .comp-num{color:#EA580C}
+.c4 .comp-num{color:#7C3AED}
+
+.comp-name{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:5px}
+.comp-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+/* Quote */
+.quote-block{
+  background:var(--navy);border-radius:12px;
+  padding:20px 24px;margin-bottom:24px;
+}
+.quote-mark{font-size:40px;font-weight:900;color:var(--gold);line-height:.8;margin-bottom:6px}
+.quote-text{font-size:14px;font-style:italic;color:#fff;line-height:1.6;margin-bottom:8px}
+.quote-cite{font-size:11px;font-weight:700;color:var(--gold)}
+
+/* How it works */
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-num{
+  min-width:28px;height:28px;border-radius:50%;
+  background:var(--gold);color:var(--navy);
+  font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-text{font-size:12px;color:var(--dgray);line-height:1.5;padding-top:4px}
+.step-text strong{color:var(--navy)}
+
+/* Right sidebar */
+.col-side{}
+
+/* Stats */
+.stats-block{
+  background:var(--navy);border-radius:12px;padding:18px;margin-bottom:16px;
+}
+.stats-title{font-size:9px;letter-spacing:2px;font-weight:700;color:var(--gold);margin-bottom:12px}
+.stat-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.stat-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.stat-num{font-size:26px;font-weight:900;color:var(--gold);line-height:1}
+.stat-lbl{font-size:11px;color:var(--lgray);line-height:1.4;margin-top:2px}
+
+/* Differentiators */
+.diff-block{
+  background:var(--light);border-radius:12px;
+  padding:16px 18px;margin-bottom:16px;
+  border:1px solid #E2E8F0;
+}
+.diff-title{font-size:9px;letter-spacing:2px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.diff-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:11.5px;color:var(--dgray);margin-bottom:8px;line-height:1.4;
+}
+.diff-item::before{
+  content:'';min-width:6px;height:6px;
+  background:var(--emerald);border-radius:50%;margin-top:4px;flex-shrink:0;
+}
+
+/* For whom */
+.whom-block{
+  background:var(--emerald);border-radius:12px;
+  padding:16px 18px;
+}
+.whom-title{font-size:9px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:10px}
+.whom-item{
+  font-size:11.5px;color:#fff;margin-bottom:6px;
+  display:flex;align-items:flex-start;gap:6px;
+}
+.whom-item::before{content:'→';color:var(--gold);font-weight:700;flex-shrink:0}
+
+/* ── FOOTER ── */
+.page-footer{
+  background:var(--navy);
+  padding:18px 44px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-ponente{display:flex;align-items:center;gap:14px}
+.footer-avatar{
+  width:38px;height:38px;border-radius:8px;
+  background:var(--gold);display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:800;color:var(--navy);flex-shrink:0;
+}
+.footer-name{font-size:13px;font-weight:700;color:#fff}
+.footer-cargo{font-size:11px;color:var(--lgray)}
+.footer-contact{text-align:right}
+.footer-contact a{
+  font-size:11px;color:var(--gold);text-decoration:none;
+  display:block;margin-bottom:3px;
+}
+.footer-event{
+  background:var(--gold);border-radius:8px;
+  padding:6px 16px;font-size:12px;font-weight:800;color:var(--navy);
+}
+
+/* ── PRINT STYLES ── */
+@media print{
+  body{background:#fff;padding:0}
+  .print-bar{display:none}
+  .page{
+    width:210mm;min-height:297mm;
+    box-shadow:none;border-radius:0;
+  }
+  .page-body{padding:24px 36px}
+  .page-header{padding:26px 36px 22px}
+  .page-footer{padding:14px 36px}
+}
+
+@media(max-width:830px){
+  .page{width:100%;min-height:auto}
+  .page-body{grid-template-columns:1fr}
+  .col-side{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <h3>Mini-Guía · Modelo GIV® · Vista previa</h3>
+  <button class="btn-print" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-tag">MINI-GUÍA · RECURSO GRATUITO · PDIS 2026</div>
+      <div class="header-title">Modelo <em>GIV®</em></div>
+      <div class="header-title" style="font-size:13px;font-weight:600;color:rgba(255,255,255,.75);margin-top:4px">
+        Gobernanza Intercultural para la Generación de Valor Social
+      </div>
+      <div class="header-sub" style="margin-top:10px">
+        Un sistema integrado para construir y gestionar la confianza comunitaria en proyectos de impacto social.
+      </div>
+    </div>
+    <div class="header-badge">
+      <div class="badge-label">PONENCIA</div>
+      <div class="badge-val">PDIS 2026</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:4px">PMI · Online</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="page-body">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-main">
+
+      <!-- Components -->
+      <div class="s-label">El sistema</div>
+      <div class="s-title">Los 4 componentes del Modelo GIV®</div>
+      <div class="components-grid">
+        <div class="comp-card c1">
+          <div class="comp-num">01</div>
+          <div class="comp-name">Personas y Comunidades</div>
+          <div class="comp-desc">Mapeo de actores, identificación de intereses y espacios formales y recurrentes de escucha comunitaria.</div>
+        </div>
+        <div class="comp-card c2">
+          <div class="comp-num">02</div>
+          <div class="comp-name">Instituciones</div>
+          <div class="comp-desc">Articulación de compromisos con responsables, plazos e indicadores verificables entre todas las instituciones involucradas.</div>
+        </div>
+        <div class="comp-card c3">
+          <div class="comp-num">03</div>
+          <div class="comp-name">Procesos Metodológicos</div>
+          <div class="comp-desc">Protocolos, guías y estándares que hacen la gestión social verificable, auditable y replicable en futuros proyectos.</div>
+        </div>
+        <div class="comp-card c4">
+          <div class="comp-num">04</div>
+          <div class="comp-name">Conocimiento Transferible</div>
+          <div class="comp-desc">Sistematización de aprendizajes y transferencia de capacidades a la comunidad como parte del diseño del proyecto.</div>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-block">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">La confianza no es una consecuencia espontánea del proyecto. Es un activo estratégico que debe construirse y gestionarse de manera deliberada.</div>
+        <div class="quote-cite">— Miriam Escobar Espinoza · Modelo GIV®</div>
+      </div>
+
+      <!-- How it works -->
+      <div class="s-label">Cómo funciona</div>
+      <div class="s-title" style="font-size:14px">El Modelo GIV® como sistema integrado</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Diagnóstico inicial:</strong> Se mapean los actores comunitarios e institucionales, sus intereses y el estado actual de la confianza en el proyecto.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Diseño del sistema:</strong> Se articulan los 4 componentes en un plan integrado con procesos, compromisos y métricas de seguimiento.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Gestión continua:</strong> El sistema se implementa, se monitorea y se ajusta en cada etapa del ciclo de vida del proyecto.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Transferencia:</strong> Al cierre, la comunidad e instituciones locales quedan con capacidades instaladas para sostener los acuerdos de forma autónoma.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="col-side">
+
+      <!-- Stats -->
+      <div class="stats-block">
+        <div class="stats-title">EL CONTEXTO</div>
+        <div class="stat-item">
+          <div class="stat-num">+50%</div>
+          <div class="stat-lbl">de proyectos en ALC enfrenta conflictos sociales significativos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">USD 20M</div>
+          <div class="stat-lbl">costo promedio de un proyecto paralizado por conflicto comunitario</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-lbl">componentes que el Modelo GIV® integra en un solo sistema</div>
+        </div>
+      </div>
+
+      <!-- Differentiators -->
+      <div class="diff-block">
+        <div class="diff-title">POR QUÉ GIV® ES DIFERENTE</div>
+        <div class="diff-item">Integra en un sistema lo que otros gestionan como silos separados</div>
+        <div class="diff-item">Define la confianza como activo estratégico, no como resultado espontáneo</div>
+        <div class="diff-item">Genera evidencia verificable y auditable en cada componente</div>
+        <div class="diff-item">Transfiere capacidades a la comunidad — valor que permanece</div>
+      </div>
+
+      <!-- For whom -->
+      <div class="whom-block">
+        <div class="whom-title">PARA QUIÉN</div>
+        <div class="whom-item">Directores de proyectos sociales</div>
+        <div class="whom-item">Especialistas en sostenibilidad</div>
+        <div class="whom-item">Gerentes de relaciones comunitarias</div>
+        <div class="whom-item">Consultores de impacto social</div>
+        <div class="whom-item">Instituciones públicas y privadas</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div class="footer-ponente">
+      <div class="footer-avatar">ME</div>
+      <div>
+        <div class="footer-name">Miriam Escobar Espinoza</div>
+        <div class="footer-cargo">Economista · Especialista en Gestión Social</div>
+      </div>
+    </div>
+    <div class="footer-contact">
+      <a href="https://www.linkedin.com/in/miriam-soledad-escobar-espinoza-566407200" target="_blank">linkedin.com/in/miriam-soledad-escobar-espinoza</a>
+      <a href="mailto:miriam.escobar0601@gmail.com">miriam.escobar0601@gmail.com</a>
+    </div>
+    <div class="footer-event">PDIS 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
